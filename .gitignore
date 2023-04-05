@@ -1,0 +1,10 @@
+#
+# Generated files
+#
+build/
+
+#
+# IDE
+#
+.vscode
+.idea
