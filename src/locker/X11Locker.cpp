@@ -5,6 +5,7 @@
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 
 namespace
@@ -127,14 +128,45 @@ void X11Locker::Impl::grabPointer(Window& window)
 
 void X11Locker::Impl::waitForPassword()
 {
-    XEvent ev;
+    XEvent event;
+    KeySym key;
+    char buffer[10];
+    char password[128];
+    size_t password_offset = 0;
+
     for (;;)
     {
-        XNextEvent(display_, &ev);
-        switch (ev.type)
+        XNextEvent(display_, &event);
+        switch (event.type)
         {
-        case KeyPress:
-            return;
+        case KeyPress: {
+            auto input_len = XLookupString(&event.xkey, buffer, sizeof(buffer) - 1, &key, nullptr);
+
+            switch (key)
+            {
+            case XK_BackSpace:
+                if (password_offset != 0)
+                    --password_offset;
+                break;
+            case XK_Escape:
+                password_offset = 0;
+                break;
+            case XK_Return:
+            case XK_KP_Enter:
+                password[password_offset] = '\0';
+                password_offset = 0;
+                if (auth_.is_correct_password(password))
+                    return;
+                break;
+            default:
+                if (input_len == 1)
+                    password[password_offset++] = buffer[0];
+
+                password_offset %= sizeof(password);
+                break;
+            }
+            break;
+        }
         default:
             break;
         }

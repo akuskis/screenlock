@@ -1,9 +1,8 @@
 #include "auth/ShadowAuth.hpp"
 #include "locker/X11Locker.hpp"
-#include "os.hpp"
+// #include "os.hpp" TODO:
 
 #include <cstdlib>
-#include <iostream>
 
 int main(int /* argc */, char** /* argv */)
 {
