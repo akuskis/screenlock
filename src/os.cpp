@@ -18,4 +18,5 @@ XdgSessionType get_xdg_session_type()
 
     return it == xdg_session_map.end() ? XdgSessionType::OTHER : it->second;
 }
+
 } // namespace os

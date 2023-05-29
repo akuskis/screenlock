@@ -1,3 +1,5 @@
+#include "auth/ShadowAuth.hpp"
+#include "locker/X11Locker.hpp"
 #include "os.hpp"
 
 #include <cstdlib>
@@ -5,12 +7,10 @@
 
 int main(int /* argc */, char** /* argv */)
 {
-    auto const xdg_session_type = os::get_xdg_session_type();
+    ShadowAuth auth;        // TODO: factory to generate correct Auth
+    X11Locker locker(auth); // TODO: factory to generate correct Locker
 
-    std::cout << (int)xdg_session_type << std::endl;
-
-    // auto window_system = Factory::create(current_window_system);
-    // window_system.lock()
+    locker.lock();
 
     return EXIT_SUCCESS;
 }
