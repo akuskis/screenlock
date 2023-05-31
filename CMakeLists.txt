@@ -14,6 +14,8 @@ set(SOURCES
         src/locker/LockerError.hpp
         src/locker/X11Locker.cpp
         src/locker/X11Locker.hpp
+        src/locker/X11Locker_impl.cpp
+        src/locker/X11Locker_impl.hpp
         src/main.cpp
         src/os.cpp
         src/os.hpp
