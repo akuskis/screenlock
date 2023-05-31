@@ -106,8 +106,17 @@ void X11Locker::Impl::mapWindow(Window& window)
 
 void X11Locker::Impl::grabKeyboard(Window& window)
 {
-    if (XGrabKeyboard(display_, window, False, GrabModeAsync, GrabModeAsync, CurrentTime) != GrabSuccess)
-        throw LockerError("Cannot grab keyboard");
+    // try to grab keyboard multiple times (this is necessary when application is executed from shortcut)
+    for (size_t i = 0; i < 100; ++i)
+    {
+        if (XGrabKeyboard(display_, window, False, GrabModeAsync, GrabModeAsync, CurrentTime) == GrabSuccess)
+            return;
+
+        timeval tv{.tv_sec = 0, .tv_usec = 10000};
+        select(1, nullptr, nullptr, nullptr, &tv);
+    }
+
+    throw LockerError("Cannot grab keyboard");
 }
 
 void X11Locker::Impl::grabPointer(Window& window)
