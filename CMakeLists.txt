@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.25)
 project(screen_lock)
 
 set(CMAKE_CXX_STANDARD 20)
-# SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pedantic -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pedantic -Wall -Wextra")
 
 set(SOURCES
         src/auth/Auth.hpp
@@ -12,6 +12,8 @@ set(SOURCES
         src/auth/ShadowAuth.hpp
         src/locker/Locker.hpp
         src/locker/LockerError.hpp
+        src/locker/Position.hpp
+        src/locker/Size.hpp
         src/locker/X11Locker.cpp
         src/locker/X11Locker.hpp
         src/locker/X11Locker_impl.cpp

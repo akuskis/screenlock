@@ -1,6 +1,10 @@
+#include "Size.hpp"
 #include "X11Locker.hpp"
 
 #include <X11/Xlib.h>
+
+#include <vector>
+
 
 class X11Locker::Impl
 {
@@ -8,20 +12,21 @@ public:
     explicit Impl(Auth const& auth);
     ~Impl();
 
-    Window drawBlackWindow();
-    void drawCursor(Window& window);
-
-    void mapWindow(Window& window);
-    void grabKeyboard(Window& window);
-    void grabPointer(Window& window);
-
-    void waitForPassword();
+    void lock();
 
 private:
     Auth const& auth_;
-
     _XDisplay* display_;
     int const screen_;
-    std::unique_ptr<Pixmap> pixmap_;
-    std::unique_ptr<Cursor> cursor_;
+
+    std::vector<Pixmap> icons_;
+
+    Window drawBlackWindow();
+
+    void hideSystemCursor(Window& window);
+    void updateScene(Window& window, unsigned int angle, Size<unsigned int> window_size);
+    void mapWindow(Window& window);
+    void grabKeyboard(Window& window);
+
+    void eventLoop(Window& window);
 };
